@@ -1,0 +1,14 @@
+.map-container {
+    position: absolute; 
+    top: 50%;         
+    left: 50%;        
+    transform: translate(-50%, -50%); /* Adjust for centering */
+    width: 350px;      /* Set a desired width */
+    height: 300px;     /* Set a desired height */
+    /* Remove or adjust margin-top if needed */
+}
+
+.datamap {
+    width: 120%;      /* Fill the container */
+    height: 120%;     /* Fill the container */
+}
