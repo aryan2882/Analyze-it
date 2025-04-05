@@ -36,22 +36,52 @@ userRouter.post("/register", async (req, res) => {
 });
 
 //Login
+// userRouter.post("/login", async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//     const user = await User.findOne({ email });
+//     if (user && (await user.matchPassword(password))) {
+//       res.json({
+//         user: {
+//           _id: user._id,
+//           username: user.username,
+//           email: user.email,
+//           statust: user.statust,
+//           role:user.role,
+//           token: generateToken(user._id),
+//         },
+//       });
+//       console.log(user);
+//     } else {
+//       res.status(401).json({ message: "Invalid email or password" });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// });
+
 userRouter.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+
     if (user && (await user.matchPassword(password))) {
+      // Update last login timestamp
+      user.lastLogin = new Date();
+      await user.save();
+
       res.json({
         user: {
           _id: user._id,
           username: user.username,
           email: user.email,
           statust: user.statust,
-          role:user.role,
+          role: user.role,
+          lastLogin: user.lastLogin, // Include last login in response
           token: generateToken(user._id),
         },
       });
-      console.log(user);
+      console.log("User Logged In:", user);
     } else {
       res.status(401).json({ message: "Invalid email or password" });
     }
@@ -59,6 +89,7 @@ userRouter.post("/login", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
 
 //generate token
 const generateToken = (id) => {
@@ -69,12 +100,25 @@ const generateToken = (id) => {
 
 
 //get last 5 
-userRouter.get("/latest-users", async (req, res) => {
-    try {
-      const users = await User.find().sort({ createdAt: -1 }).limit(5);
-      res.json(users);
-    } catch (error) {
-      res.status(500).json({ message: "Server Error", error });
-    }
-  });
+// userRouter.get("/latest-users", async (req, res) => {
+//     try {
+//       const users = await User.find().sort({ createdAt: -1 }).limit(5);
+//       res.json(users);
+//     } catch (error) {
+//       res.status(500).json({ message: "Server Error", error });
+//     }
+//   });
+
+userRouter.get("/latest-logins", async (req, res) => {
+  try {
+    const users = await User.find({ lastLogin: { $ne: null } }) // Find users with lastLogin set
+      .sort({ lastLogin: -1 }) // Sort by last login (most recent first)
+      .limit(5);
+
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+});
+
 module.exports = userRouter;

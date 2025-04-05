@@ -125,6 +125,7 @@ import SettingsPage from "./pages/SettingsPage";
 import Register  from "./pages/Register";
 import Login from "./pages/Login";
 import LogoutPage from "./pages/LogoutPage"
+import Transaction from "./pages/Transaction";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -171,6 +172,7 @@ function App() {
         <Route path="/analytics" element={isAuthenticated ? <AnalyticsPage /> : <Navigate to="/login" />} />
         <Route path="/orders" element={isAuthenticated ? <OrdersPage /> : <Navigate to="/login" />} />
         <Route path="/users" element={isAuthenticated ? <UsersPage /> : <Navigate to="/login" />} />
+        <Route path="/transactions" element={isAuthenticated ? <Transaction /> : <Navigate to="/login" />} />
         <Route path="/settings" element={isAuthenticated ? <SettingsPage /> : <Navigate to="/login" />} />
       </Routes>
     </div>

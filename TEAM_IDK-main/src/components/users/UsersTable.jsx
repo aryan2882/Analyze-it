@@ -136,7 +136,7 @@ const UsersTable = () => {
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
-				const response = await fetch("http://localhost:9000/api/users/latest-users"); // Adjust API URL if needed
+				const response = await fetch("http://localhost:9000/api/users/latest-logins"); // Adjust API URL if needed
 				const data = await response.json();
 				setUsers(data);
 				console.log(data);
